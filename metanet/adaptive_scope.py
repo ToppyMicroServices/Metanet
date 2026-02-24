@@ -11,12 +11,14 @@ class AdaptiveScopeExpander:
     best_loss: Optional[float] = field(default=None, init=False)
     no_improvement_steps: int = field(default=0, init=False)
     scope_change_log: List[str] = field(default_factory=list, init=False)
+    _layer_priority: Dict[str, int] = field(default_factory=dict, init=False)
 
     def __post_init__(self) -> None:
         if not self.layers:
             raise ValueError("layers must not be empty")
         if self.no_improvement_patience < 1:
             raise ValueError("no_improvement_patience must be >= 1")
+        self._layer_priority = {layer: index for index, layer in enumerate(self.layers)}
         self.current_scope = [self.layers[-1]]
         self.scope_change_log.append(
             f"scope_init: editable_scope={self.current_scope}"
@@ -47,7 +49,10 @@ class AdaptiveScopeExpander:
             return False
         most_influential = max(
             candidate_layers,
-            key=lambda layer: (self.contribution_scores.get(layer, 0.0), self.layers.index(layer)),
+            key=lambda layer: (
+                self.contribution_scores.get(layer, 0.0),
+                self._layer_priority[layer],
+            ),
         )
         self.current_scope.append(most_influential)
         self.scope_change_log.append(

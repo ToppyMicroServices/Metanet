@@ -43,7 +43,7 @@ class AdaptiveScopeExpanderTests(unittest.TestCase):
         )
 
         expander.step(loss=1.0, contributions={"encoder": 0.5, "mid_adapter": 0.5})
-        expander.step(loss=1.0)
+        self.assertTrue(expander.step(loss=1.0))
 
         self.assertEqual(
             tuple(expander.get_scope()),
