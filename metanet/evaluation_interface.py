@@ -43,7 +43,10 @@ def evaluate_predictions(
     source: PredictionSource,
     evaluator: Callable[[Sequence[Mapping[str, Any]]], Any],
 ) -> Any:
-    """Evaluate predictions without imposing dataset-specific assumptions."""
+    """Evaluate predictions without imposing dataset-specific assumptions.
+
+    Missing or malformed sources are treated as an empty prediction list.
+    """
 
     prediction_dictionary = source.prediction_dictionary()
     predictions = prediction_dictionary.get("predictions", [])
