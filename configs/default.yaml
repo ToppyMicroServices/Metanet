@@ -1,0 +1,36 @@
+# Safe MetaNet – default configuration
+# All fields correspond to SafeMetaNetConfig dataclass fields.
+
+# ------------------------------------------------------------------ model
+backbone: mlp          # "mlp" | "cnn"
+hidden_dim: 64
+num_layers: 3
+input_dim: 32
+output_dim: 10
+
+# --------------------------------------------------------------- adapter
+adapter_type: lora     # "lora" | "linear_adapter"
+lora_rank: 4
+adapter_bottleneck: 8
+
+# --------------------------------------------------------------- training
+lr: 0.001
+num_steps: 1
+trust_region_lambda: 0.01
+
+# -------------------------------------------------------------- rollback
+rollback_threshold: 0.0   # accept only if metric strictly improves
+
+# ---------------------------------------------------------- scope expansion
+# Start with layer_2 (last layer); expand inward on rejection.
+expansion_schedule:
+  - layer_2
+  - layer_1
+  - layer_0
+
+# ------------------------------------------------------------ ablation
+disable_rollback: false
+disable_scope_expansion: false
+
+# --------------------------------------------------------------- logging
+log_level: INFO
