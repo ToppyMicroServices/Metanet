@@ -1,0 +1,11 @@
+rollback:
+  enabled: true
+
+scope_expansion:
+  enabled: false
+
+trust_region:
+  enabled: true
+
+adaptation:
+  steps: 5
