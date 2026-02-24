@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from copy import deepcopy
 from dataclasses import dataclass, field
 from math import isfinite
 from typing import Any, Callable, Dict, List, Mapping, MutableMapping
@@ -82,7 +81,7 @@ def safe_metanet_adaptation_loop(
 
     for step in range(config.steps):
         score_before = current_score
-        candidate_state = dict(propose_update(deepcopy(current_state), current_scope))
+        candidate_state = dict(propose_update(dict(current_state), current_scope))
         candidate_score = _as_finite_score(evaluate(candidate_state))
 
         rejection_reason = None
@@ -106,6 +105,8 @@ def safe_metanet_adaptation_loop(
             if config.ablations.disable_rollback:
                 current_state = candidate_state
                 current_score = candidate_score
+                accepted = True
+                rejection_reason = "rollback_disabled"
 
         events.append(
             AdaptationEvent(

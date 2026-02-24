@@ -50,7 +50,8 @@ class SafeMetaNetLoopTests(unittest.TestCase):
         )
 
         self.assertEqual(result.final_state["x"], 9.0)
-        self.assertFalse(result.events[0].accepted)
+        self.assertTrue(result.events[0].accepted)
+        self.assertEqual(result.events[0].rejection_reason, "rollback_disabled")
 
     def test_ablation_can_disable_safety_checks(self) -> None:
         config = AdaptationConfig(
