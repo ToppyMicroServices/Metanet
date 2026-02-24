@@ -37,7 +37,7 @@ class SafeMetaNetLoopTests(unittest.TestCase):
         config = AdaptationConfig(
             steps=1,
             initial_scope=1,
-            max_scope=1,
+            max_scope=3,
             safety_margin=0.5,
             ablations=AblationConfig(disable_rollback=True),
         )
@@ -50,8 +50,29 @@ class SafeMetaNetLoopTests(unittest.TestCase):
         )
 
         self.assertEqual(result.final_state["x"], 9.0)
+        self.assertEqual(result.final_scope, 1)
         self.assertTrue(result.events[0].accepted)
-        self.assertEqual(result.events[0].rejection_reason, "rollback_disabled")
+        self.assertIsNone(result.events[0].rejection_reason)
+
+    def test_scope_expansion_is_used_on_next_step(self) -> None:
+        config = AdaptationConfig(steps=2, initial_scope=1, max_scope=3, scope_increment=1, safety_margin=0.5)
+        seen_scopes = []
+
+        def propose_update(state, scope):
+            seen_scopes.append(scope)
+            if scope == 1:
+                return {"x": state["x"] - 1.0}
+            return {"x": state["x"] + 1.0}
+
+        result = safe_metanet_adaptation_loop(
+            initial_state={"x": 10.0},
+            propose_update=propose_update,
+            evaluate=lambda state: float(state["x"]),
+            config=config,
+        )
+
+        self.assertEqual(seen_scopes, [1, 2])
+        self.assertEqual(result.final_state["x"], 11.0)
 
     def test_ablation_can_disable_safety_checks(self) -> None:
         config = AdaptationConfig(

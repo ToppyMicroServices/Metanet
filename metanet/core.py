@@ -81,7 +81,8 @@ def safe_metanet_adaptation_loop(
 
     for step in range(config.steps):
         score_before = current_score
-        candidate_state = dict(propose_update(dict(current_state), current_scope))
+        proposal_scope = current_scope
+        candidate_state = dict(propose_update(dict(current_state), proposal_scope))
         candidate_score = _as_finite_score(evaluate(candidate_state))
 
         rejection_reason = None
@@ -99,19 +100,18 @@ def safe_metanet_adaptation_loop(
             current_state = candidate_state
             current_score = candidate_score
         else:
-            if not config.ablations.disable_scope_expansion and current_scope < config.max_scope:
-                current_scope = min(config.max_scope, current_scope + config.scope_increment)
-
             if config.ablations.disable_rollback:
                 current_state = candidate_state
                 current_score = candidate_score
                 accepted = True
-                rejection_reason = "rollback_disabled"
+                rejection_reason = None
+            elif not config.ablations.disable_scope_expansion and current_scope < config.max_scope:
+                current_scope = min(config.max_scope, current_scope + config.scope_increment)
 
         events.append(
             AdaptationEvent(
                 step=step,
-                scope=current_scope,
+                scope=proposal_scope,
                 accepted=accepted,
                 score_before=score_before,
                 score_after=candidate_score,
