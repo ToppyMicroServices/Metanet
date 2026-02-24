@@ -12,11 +12,11 @@ The following runtime options are intended to be controlled from config:
 
 A minimal baseline config is available at:
 
-- `/home/runner/work/Metanet/Metanet/configs/base.yaml`
+- `configs/base.yaml`
 
 Minimal ablation configs (one toggle change per file):
 
-- `/home/runner/work/Metanet/Metanet/configs/ablations/no_rollback.yaml`
-- `/home/runner/work/Metanet/Metanet/configs/ablations/no_scope_expansion.yaml`
-- `/home/runner/work/Metanet/Metanet/configs/ablations/no_trust_region.yaml`
-- `/home/runner/work/Metanet/Metanet/configs/ablations/adaptation_steps_1.yaml`
+- `configs/ablations/no_rollback.yaml`
+- `configs/ablations/no_scope_expansion.yaml`
+- `configs/ablations/no_trust_region.yaml`
+- `configs/ablations/adaptation_steps_1.yaml`
