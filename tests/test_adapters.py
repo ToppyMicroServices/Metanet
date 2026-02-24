@@ -109,9 +109,6 @@ class TestSnapshotRestore:
             p.data.fill_(999.0)
 
         restore_adapters(model, snap)
-        for key, val in snap.items():
-            # Find the tensor again after restoration
-            pass  # restore succeeded without error
 
         # Verify values are restored
         snap2 = snapshot_adapters(model)

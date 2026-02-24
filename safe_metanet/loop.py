@@ -120,6 +120,11 @@ class SafeMetaNet:
         self._step += 1
         scope_expanded = False
 
+        # Initialise metric sentinels in case the schedule is empty and the
+        # loop body never executes (defensive guard).
+        metric_before: float = 0.0
+        metric_after: float = 0.0
+
         # We may retry with an expanded scope on rejection.
         for attempt in range(len(self._schedule) + 1):
             snap = snapshot_adapters(self.model)
