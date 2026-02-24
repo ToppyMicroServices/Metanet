@@ -4,10 +4,10 @@ MetaNet: test-time weight editing with adaptive scope expansion and accept/rejec
 ## Safe MetaNet core loop (PyTorch)
 
 Core components are separated into:
-- `/home/runner/work/Metanet/Metanet/metanet/model.py`: frozen base model + LoRA adapters
-- `/home/runner/work/Metanet/Metanet/metanet/adaptation.py`: accept/reject + rollback + adaptive scope expansion loop
-- `/home/runner/work/Metanet/Metanet/metanet/metrics.py`: metric utilities
-- `/home/runner/work/Metanet/Metanet/metanet/utils.py`: snapshots, rollback helpers, and scope controls
+- `metanet/model.py`: frozen base model + LoRA adapters
+- `metanet/adaptation.py`: accept/reject + rollback + adaptive scope expansion loop
+- `metanet/metrics.py`: metric utilities
+- `metanet/utils.py`: snapshots, rollback helpers, and scope controls
 
 Run focused tests with:
 

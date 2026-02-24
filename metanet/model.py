@@ -9,6 +9,7 @@ from torch import nn
 class LoRAAdapter(nn.Module):
     """Minimal LoRA-style adapter for Linear layers."""
 
+    # Marker used to identify trainable adaptation modules.
     is_adapter = True
 
     def __init__(self, in_features: int, out_features: int, rank: int = 2) -> None:

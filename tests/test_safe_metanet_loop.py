@@ -28,7 +28,7 @@ class SafeMetaNetLoopTests(unittest.TestCase):
         model = _build_model()
         batch = _batch()
 
-        def metric_fn(model, _batch):
+        def metric_fn(model, batch):
             # Metric is best when adapter weights stay near zero.
             with torch.no_grad():
                 penalty = 0.0
@@ -51,7 +51,7 @@ class SafeMetaNetLoopTests(unittest.TestCase):
         model = _build_model()
         batch = _batch()
 
-        def metric_fn(model, _batch):
+        def metric_fn(model, batch):
             # Metric increases with adapter movement away from zero.
             with torch.no_grad():
                 gain = 0.0

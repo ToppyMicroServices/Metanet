@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List
+from typing import Callable, Dict, List
 
 import torch
 from torch import nn
@@ -25,13 +25,15 @@ class SafeMetaNetLoop:
         self,
         model: nn.Module,
         metric_fn: MetricFn,
-        loss_fn: nn.Module | None = None,
+        loss_fn: Callable[[torch.Tensor, torch.Tensor], torch.Tensor] | None = None,
         learning_rate: float = 1e-3,
         min_delta: float = 0.0,
     ) -> None:
         self.model = model
         self.metric_fn = metric_fn
-        self.loss_fn = loss_fn or nn.MSELoss()
+        if loss_fn is None:
+            loss_fn = nn.MSELoss()
+        self.loss_fn = loss_fn
         self.learning_rate = learning_rate
         self.min_delta = min_delta
 
